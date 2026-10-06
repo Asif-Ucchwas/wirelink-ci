@@ -1,0 +1,14 @@
+# SCons build output
+build/
+.sconsign.dblite
+.sconf_temp/
+config.log
+
+# C objects and binaries
+*.o
+*.a
+
+# Python / pytest
+__pycache__/
+*.pyc
+.pytest_cache/
