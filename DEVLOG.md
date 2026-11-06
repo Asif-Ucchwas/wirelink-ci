@@ -10,3 +10,8 @@
 - 129 unit checks; known-answer CRC check ("123456789" gives 0xCBF43926).
 - Padding note: the NIC pads short frames to 60 bytes, so the len field decides where the payload ends.
 - `scons -Q test` is green (gcc 15.2, SCons 4.8.1).
+
+## 2026-11-05 - Stage 2, part 1: sender, receiver and link tests (cable not tested yet)
+- Raw AF_PACKET sender and receiver (EtherType 0x88B5). The receiver reports rx, CRC errors, gaps, lost, duplicates and bad payloads.
+- Six pytest link tests. They pass on the loopback interface, and each fails when the code is broken on purpose.
+- The sender counts a frame as dropped (instead of retrying forever) if the transmit queue stays full, so a cable pull shows up as a sequence gap.

@@ -23,4 +23,9 @@ run_tests = env.Command("run_tests", test_frame, "./$SOURCE")
 AlwaysBuild(run_tests)
 env.Alias('test', run_tests)
 
-Default(frame_lib, test_frame)
+# Raw-socket helper plus the two link programs (need root or CAP_NET_RAW to run).
+rawsock_lib = env.StaticLibrary('build/rawsock', ['build/src/rawsock.c'])
+sender = env.Program('build/sender', ['build/src/sender.c', rawsock_lib, frame_lib])
+receiver = env.Program('build/receiver', ['build/src/receiver.c', rawsock_lib, frame_lib])
+
+Default(frame_lib, rawsock_lib, test_frame, sender, receiver)
