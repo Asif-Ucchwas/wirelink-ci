@@ -34,6 +34,26 @@ def require_config():
         pytest.fail("set WL_TX_IF and WL_RX_MAC (see the docstring at the top of this file)")
 
 
+def read_carrier(iface, host=""):
+    """Return the contents of /sys/class/net/<iface>/carrier ('1' = cable linked), or an error string."""
+    path = "/sys/class/net/%s/carrier" % iface
+    cmd = ["ssh", "-o", "BatchMode=yes", host, "cat " + path] if host else ["cat", path]
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    return r.stdout.strip() if r.returncode == 0 else "unreadable (%s)" % r.stderr.strip()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def link_has_carrier():
+    # A port without carrier still accepts sendto(), so frames vanish silently. Check first.
+    if not TX_IF or not RX_MAC:
+        return   # require_config reports this
+    for where, iface, host in (("sender", TX_IF, ""), ("receiver", RX_IF, RX_HOST)):
+        state = read_carrier(iface, host)
+        if state != "1":
+            pytest.fail("NO CARRIER on %s port %s (carrier=%s): check the cable and both ports"
+                        % (where, iface, state), pytrace=False)
+
+
 def start_receiver():
     args = SUDO + ["./build/receiver", RX_IF, "--idle", str(IDLE_SECONDS), "--timeout", "60"]
     if RX_HOST:
