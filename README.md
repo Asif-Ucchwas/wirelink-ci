@@ -94,3 +94,7 @@ Only 1 of the 129 checks failed in the red run. The other checks (round trips, p
 - **Unexplained.** A receiver started detached over ssh (`nohup ... &`) reported `rx=0` twice, while the same receiver started in the foreground worked. I worked around it (pytest starts the receiver attached) but did not find the root cause.
 
 See `DEVLOG.md` for the full history.
+
+## License
+
+MIT. See `LICENSE`.
