@@ -20,3 +20,11 @@
 - Acer built-in Ethernet jack is loose or faulty: NO-CARRIER on both ends.
 - Added a carrier check to tests/test_link.py so a dead link fails loudly.
 - Waiting on a USB-to-Ethernet adapter for the Acer.
+
+## 2026-11-07 - Stage 2 link verified (Legion sender, Jetson Nano receiver)
+- Jetson Nano (aarch64, gcc 7.5, SCons 3.0.1): 129 unit checks pass.
+- 6 link tests pass over the real cable (19.8 s).
+- Unplug test: 60000 frames, cable out about 12 s -> rx=48081 lost=11919 gaps=1 crc_err=0 dup=0 payload_bad=0 (rx+lost=60000).
+- pcap saved: assets/wirelink-link.pcap (6 frames).
+- Note: Jetson eth0 MAC reads 00:00:00:00:00:01.
+- Note: a receiver started detached over ssh (nohup) reported rx=0 twice; started in the foreground it works (cause not fully diagnosed).
