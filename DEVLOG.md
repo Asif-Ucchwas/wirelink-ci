@@ -28,3 +28,11 @@
 - pcap saved: assets/wirelink-link.pcap (6 frames).
 - Note: Jetson eth0 MAC reads 00:00:00:00:00:01.
 - Note: a receiver started detached over ssh (nohup) reported rx=0 twice; started in the foreground it works (cause not fully diagnosed).
+
+## 2026-11-08 - Stage 3 Jenkins pipeline verified
+
+- Jenkins LTS 2.580.2 runs natively on the Legion (Ubuntu 24.04, Java 21). Job `wirelink-ci` is a Pipeline from SCM (this repo, branch main). The job name matters: the sudoers rule for the jenkins user points at the workspace path.
+- Run #1 green in 31 s: Build, Unit tests, Update receiver on Jetson, Link tests (6 passed over the cable).
+- Run #2 red on purpose: changed the CRC polynomial in src/frame.c. Only 1 of 129 checks failed (the CRC-32 test vector for "123456789"); the round-trip checks stay self-consistent with a wrong polynomial. Pipeline stopped at Unit tests; Jetson and link stages were skipped.
+- Run #3 green in 23 s after reverting the change.
+- Screenshots are in assets/. Run #2 is commit 718500e, the revert is 8582e53.
