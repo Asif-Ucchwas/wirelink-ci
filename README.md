@@ -24,7 +24,8 @@ The Legion's second port (`enp131s0`) is cabled directly to the Jetson's `eth0`.
 ## The frame
 
 ~~~
-dst MAC (6) | src MAC (6) | EtherType 0x88B5 (2) | seq (4) | len (2) | payload (0..1490) | CRC-32 (4)
+dst MAC (6) | src MAC (6) | EtherType 0x88B5 (2) | seq (4) | len (2) |
+payload (0..1490) | CRC-32 (4)
 ~~~
 
 All multi-byte fields are big-endian. The CRC-32 is written by hand (IEEE 802.3 polynomial, reflected, init and final XOR `0xFFFFFFFF`). It does not come from a library or from the NIC. The payload pattern is deterministic (byte `j` is `(uint8_t)(seq + j)`), so the receiver can verify payload content, not only the CRC.
