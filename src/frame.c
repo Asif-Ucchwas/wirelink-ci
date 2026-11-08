@@ -11,7 +11,7 @@ uint32_t frame_crc32(const uint8_t *data, size_t n)
         crc ^= data[i];
         for (int bit = 0; bit < 8; bit++) {
             if (crc & 1u) {
-                crc = (crc >> 1) ^ 0xEDB88320u;
+                crc = (crc >> 1) ^ 0xEDB88321u;
             } else {
                 crc >>= 1;
             }
